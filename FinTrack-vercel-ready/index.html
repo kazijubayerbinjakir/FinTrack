@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f8f5">
+  <meta name="description" content="FinTrack — a calm, clear personal finance dashboard.">
+  <title>FinTrack — Personal Finance</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%279%27 fill=%27%231f6b4b%27/%3E%3Ctext x=%2716%27 y=%2723%27 font-size=%2720%27 font-weight=%27800%27 text-anchor=%27middle%27 fill=%27white%27 font-family=%27sans-serif%27%3EF%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="FinTrack home"><span class="brand-mark">F</span><span>fintrack<span class="brand-dot">.</span></span></a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="main-nav" aria-label="Main navigation">
+        <button class="nav-link active" data-view="overview"><span class="nav-icon">▦</span>Overview</button>
+        <button class="nav-link" data-view="transactions"><span class="nav-icon">⇄</span>Transactions</button>
+        <button class="nav-link" data-view="budgets"><span class="nav-icon">◷</span>Budgets</button>
+        <button class="nav-link" data-view="reports"><span class="nav-icon">▥</span>Reports</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="tip-card"><span class="tip-spark">✦</span><p class="tip-title">Small steps add up.</p><p class="tip-copy">A clear view of your money makes better decisions easier.</p></div>
+        <button class="nav-link" id="exportSide"><span class="nav-icon">⇩</span>Export data</button>
+        <div class="profile-row"><div class="avatar">J</div><div><strong>Jubayer</strong><small>Personal account</small></div><span class="profile-more">•••</span></div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="mobile-menu" id="menuToggle" aria-label="Open menu">☰</button>
+        <div><p class="eyebrow" id="dateLabel">PERSONAL FINANCE</p><h1 id="pageTitle">Good evening, Jubayer ✦</h1></div>
+        <div class="top-actions"><button class="icon-button" id="exportTop" title="Export CSV" aria-label="Export CSV">⇩</button><button class="primary-button" id="addTop">＋ Add transaction</button></div>
+      </header>
+
+      <section class="view active" id="overviewView">
+        <div class="overview-heading"><div><h2>Your overview</h2><p>Here’s what’s happening with your money.</p></div><label class="period-pill"><span class="period-dot"></span><select id="periodSelect" aria-label="Select month"></select></label></div>
+        <div class="stats-grid">
+          <article class="stat-card balance-card"><div class="stat-top"><span>Total balance</span><span class="stat-icon">◈</span></div><div class="stat-value" id="balanceValue">৳0</div><div class="stat-foot"><span class="positive">●</span> <span id="balanceCaption">Your current net position</span></div><div class="balance-decoration"></div></article>
+          <article class="stat-card"><div class="stat-top"><span>Income</span><span class="stat-icon income-icon">↙</span></div><div class="stat-value" id="incomeValue">৳0</div><div class="stat-foot"><span class="muted-dot">●</span> Money received in this period</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Expenses</span><span class="stat-icon expense-icon">↗</span></div><div class="stat-value" id="expenseValue">৳0</div><div class="stat-foot"><span class="muted-dot">●</span> Money spent in this period</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Savings rate</span><span class="stat-icon savings-icon">％</span></div><div class="stat-value" id="savingsValue">0%</div><div class="stat-foot"><span id="savingsCaption">Income minus expenses</span></div></article>
+        </div>
+
+        <div class="content-grid">
+          <article class="panel cashflow-panel"><div class="panel-heading"><div><h3>Cash flow</h3><p>Income vs expenses over time</p></div><span class="chart-legend"><i class="legend-income"></i> Income <i class="legend-expense"></i> Expenses</span></div><div class="chart-wrap"><div class="y-labels" id="yLabels"></div><div class="chart-area"><div class="chart-grid"><i></i><i></i><i></i><i></i><i></i></div><div class="bars" id="cashflowBars"></div><div class="x-labels" id="cashflowLabels"></div></div></div></article>
+          <article class="panel spending-panel"><div class="panel-heading"><div><h3>Spending breakdown</h3><p>Where your money goes</p></div><button class="text-button" data-goto="reports">Details ↗</button></div><div class="donut-row"><div class="donut" id="spendingDonut"><div class="donut-hole"><strong id="donutTotal">৳0</strong><small>Total spent</small></div></div><div class="category-legend" id="categoryLegend"></div></div></article>
+        </div>
+
+        <article class="panel transactions-panel"><div class="panel-heading"><div><h3>Recent transactions</h3><p>Your latest money activity</p></div><button class="text-button" data-goto="transactions">View all ↗</button></div><div class="table-scroll"><table><thead><tr><th>NAME</th><th>CATEGORY</th><th>DATE</th><th>AMOUNT</th></tr></thead><tbody id="recentRows"></tbody></table></div><div class="empty-state hidden" id="recentEmpty">No transactions yet. Add your first one to get started.</div></article>
+      </section>
+
+      <section class="view" id="transactionsView">
+        <div class="section-head"><div><h2>Transactions</h2><p>Track every taka coming in and going out.</p></div><button class="primary-button" id="addTransactions">＋ Add transaction</button></div>
+        <div class="toolbar"><label class="search-box"><span>⌕</span><input id="searchInput" type="search" placeholder="Search transactions..."></label><select id="typeFilter" aria-label="Filter by type"><option value="all">All types</option><option value="income">Income</option><option value="expense">Expense</option></select><select id="categoryFilter" aria-label="Filter by category"><option value="all">All categories</option></select></div>
+        <article class="panel transactions-panel"><div class="table-scroll"><table><thead><tr><th>NAME</th><th>CATEGORY</th><th>DATE</th><th>TYPE</th><th>AMOUNT</th><th></th></tr></thead><tbody id="allRows"></tbody></table></div><div class="empty-state hidden" id="allEmpty">No matching transactions found.</div></article>
+      </section>
+
+      <section class="view" id="budgetsView">
+        <div class="section-head"><div><h2>Monthly budgets</h2><p>Give every taka a purpose.</p></div><button class="primary-button" id="addBudget">＋ Set budget</button></div>
+        <div class="budget-summary" id="budgetSummary"></div><div class="budget-grid" id="budgetGrid"></div>
+      </section>
+
+      <section class="view" id="reportsView">
+        <div class="section-head"><div><h2>Reports & insights</h2><p>A clearer picture of your spending habits.</p></div><button class="secondary-button" id="reportExport">⇩ Export CSV</button></div>
+        <div class="stats-grid report-stats"><article class="stat-card"><div class="stat-top"><span>Average daily spend</span><span class="stat-icon">⌁</span></div><div class="stat-value" id="avgSpend">৳0</div><div class="stat-foot">Based on the selected month</div></article><article class="stat-card"><div class="stat-top"><span>Top category</span><span class="stat-icon">✧</span></div><div class="stat-value small-stat" id="topCategory">—</div><div class="stat-foot">Highest spending area</div></article><article class="stat-card"><div class="stat-top"><span>Transactions</span><span class="stat-icon">≋</span></div><div class="stat-value" id="transactionCount">0</div><div class="stat-foot">All recorded activity</div></article></div>
+        <article class="panel report-panel"><div class="panel-heading"><div><h3>Category insights</h3><p>Monthly expense distribution</p></div></div><div id="reportCategories" class="report-categories"></div></article>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop hidden" id="transactionModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <form class="modal" id="transactionForm"><div class="modal-heading"><div><p class="eyebrow">MONEY ACTIVITY</p><h2 id="modalTitle">Add transaction</h2></div><button type="button" class="close-button" data-close="transactionModal" aria-label="Close">×</button></div>
+      <div class="type-switch"><label><input type="radio" name="type" value="expense" checked><span>Expense</span></label><label><input type="radio" name="type" value="income"><span>Income</span></label></div>
+      <label class="field-label">Transaction name<input name="name" required maxlength="60" placeholder="e.g. Grocery shopping"></label>
+      <div class="form-row"><label class="field-label">Amount (৳)<input name="amount" type="number" min="1" step="1" required placeholder="0"></label><label class="field-label">Category<select name="category" id="formCategory" required></select></label></div>
+      <div class="form-row"><label class="field-label">Date<input name="date" type="date" required></label><label class="field-label">Note <span class="optional">(optional)</span><input name="note" maxlength="100" placeholder="Add a note"></label></div>
+      <p class="form-error hidden" id="formError"></p><div class="modal-actions"><button type="button" class="secondary-button" data-close="transactionModal">Cancel</button><button class="primary-button" type="submit">Save transaction</button></div>
+    </form>
+  </div>
+
+  <div class="modal-backdrop hidden" id="budgetModal" role="dialog" aria-modal="true" aria-labelledby="budgetModalTitle">
+    <form class="modal compact-modal" id="budgetForm"><div class="modal-heading"><div><p class="eyebrow">PLAN AHEAD</p><h2 id="budgetModalTitle">Set a budget</h2></div><button type="button" class="close-button" data-close="budgetModal" aria-label="Close">×</button></div>
+      <label class="field-label">Category<select name="category" id="budgetCategory"></select></label><label class="field-label">Monthly limit (৳)<input name="limit" type="number" min="1" step="1" required placeholder="e.g. 8000"></label><p class="form-error hidden" id="budgetError"></p><div class="modal-actions"><button type="button" class="secondary-button" data-close="budgetModal">Cancel</button><button class="primary-button" type="submit">Save budget</button></div>
+    </form>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="js/app.js"></script>
+</body>
+</html>
